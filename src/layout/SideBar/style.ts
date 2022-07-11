@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const SideBarWrapper = styled.div`
   //   display: none;
   height: 100vh;
-  width: 160px;
+  width: 250px;
   background-color: #ffffff;
   box-shadow: 0 10px 10px 2px #00000012;
   position: fixed;
@@ -22,6 +22,8 @@ export const Header = styled.h3`
 export const ColorList = styled.ul`
   padding: 20px 0;
 `;
-export const Colors = styled.ul`
+export const Colors = styled.li`
   padding: 20px 0;
-`;
+  background-color: #ff00ff;
+  margin-bottom: 10px;
+  `;

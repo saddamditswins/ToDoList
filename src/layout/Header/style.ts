@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const HeaderWrapper = styled.header`
-  width: calc(100% - 160px);
+  width: calc(100% - 250px);
   height: 60px;
   margin-left: auto;
   background-color: #088cd1;
