@@ -44,8 +44,9 @@ const DashBoard = (props: any) => {
   }, []);
 
   function checksubmit(e: any) {
+    debugger
     if (validator.allValid()) {
-      API.post(API_URLS.AddToDoList, { toDoListId: todoItem.toDoListId, colourId: e.globalCodeId, text: todoItem.name, actionPerformedBy: null }).then((response: any) => {
+      API.post(API_URLS.AddToDoList, { toDoListId: null, colourId: e.globalCodeId, text: todoItem.name, actionPerformedBy: null }).then((response: any) => {
         SuccessToast(response.responseMessage)
         setTodoItem({ ...todoItem, name: "" });
         getGetToDoList(-1);
