@@ -1,4 +1,4 @@
-import { DashBoardWrapper, MainContainer, ColorBox } from "./style";
+import { DashBoardWrapper, MainContainer, ColorBox, FormElement, ClorBoxContainer } from "./style";
 import { Input } from "semantic-ui-react";
 import InputValidator from "../Form/input"
 import { useState, useEffect } from "react";
@@ -32,28 +32,31 @@ const DashBoard = (props: any) => {
   }
 
   return (
-    <div className="container-view">
-      <div className="ui input">
-        <InputValidator
-          type={"text"}
-          name={"name"}
-          value={colorCombination.name}
-          simpleValidator={validator}
-          handleChange={onChange}
-          customValidator="required"
-          customMessage={{ required: "this field is required" }}
-        />
-      </div>
+    <>
       <DashBoardWrapper>
-      <MainContainer>
-        {" "}
-        Enter your Todo Task
-        <ColorBox style={{ backgroundColor: "#b0d8f5" }} />
-        <ColorBox style={{ backgroundColor: "#cc5af2" }} />
-      </MainContainer>
-    </DashBoardWrapper>
-      <Button onClick={checksubmit}>Primary</Button>
-    </div >
+        <MainContainer>
+          <FormElement>
+            <label>  Enter your Todo Task</label>
+            <InputValidator
+              type={"text"}
+              name={"name"}
+              value={colorCombination.name}
+              simpleValidator={validator}
+              handleChange={onChange}
+              customValidator="required"
+              customMessage={{ required: "this field is required" }}
+            />
+          </FormElement>
+          <ClorBoxContainer>
+
+            <ColorBox style={{ backgroundColor: "#b0d8f5" }} />
+            <ColorBox style={{ backgroundColor: "#cc5af2" }} />
+
+          </ClorBoxContainer>
+        </MainContainer>
+      </DashBoardWrapper>
+
+    </>
   );
 };
 

@@ -14,3 +14,17 @@ export const ColorBox = styled.div`
   width: 40px;
   border-radius: 5px;
 `;
+
+export const FormElement = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: 25px auto;
+  label {
+    margin-bottom: 10px;
+  }
+`;
+
+export const ClorBoxContainer = styled.div`
+  display: flex;
+`;
