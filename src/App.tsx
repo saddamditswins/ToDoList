@@ -6,6 +6,7 @@ import { routes } from "./config/Routes";
 import { DashBoardLayout } from "./layout";
 import { IRoute } from "./models/Interfaces/INavBar";
 
+
 function App() {
   const [isloading, setLoading] = useState(true);
   return (
