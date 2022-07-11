@@ -3,26 +3,25 @@ import {
   MainContainer,
   ColorBox,
   FormElement,
-  ClorBoxContainer,
+  ColorBoxContainer,
   ColorContentBox,
   TodoNotes,
   Heading,
 } from "./style";
-import { Input } from "semantic-ui-react";
 import InputValidator from "../Form/input";
 import { useState, useEffect } from "react";
-import { Button } from "semantic-ui-react";
 import { API_URLS } from "../../config/ApiUrls";
 import API from "../../services/Api.Service";
 import useValidator from "../../hooks/useValidator";
+import { SuccessToast } from "../../components/Toaster";
 const DashBoard = (props: any) => {
   const [validator, showValidationMessage] = useValidator();
   const [colorCombination, setEditUser] = useState({
-    color: "",
-    colorId: null,
     name: "",
   });
   const [allColour, setAllColour] = useState([]);
+
+  const [todoList, setTodoList] = useState([]);
 
   const onChange = (name: any, value: any) => {
     setEditUser({ ...colorCombination, [name]: value });
@@ -33,13 +32,23 @@ const DashBoard = (props: any) => {
     }).then((response: any) => {
       setAllColour(response);
     });
+    getGetToDoList();
   }, []);
 
   function checksubmit(e: any) {
     if (validator.allValid()) {
+      API.post(API_URLS.AddToDoList, { toDoListId: null, colourId: e.globalCodeId, text: colorCombination.name, actionPerformedBy: null }).then((response: any) => {
+        SuccessToast(response.responseMessage)
+        getGetToDoList();
+      });
     } else {
       showValidationMessage(true);
     }
+  }
+  const getGetToDoList = () => {
+    API.get(API_URLS.GetToDoList, { params: { ToDoListId: -1, ColourId: -1, PageNo: 1, PageSize: 1000, SearchValue: "", SortColumn: "", SortOrder: "" } }).then((response: any) => {
+      setTodoList(response);
+    });
   }
 
   return (
@@ -55,18 +64,23 @@ const DashBoard = (props: any) => {
               simpleValidator={validator}
               handleChange={onChange}
               customValidator="required"
-              customMessage={{ required: "this field is required" }}
+              customMessage={{ required: "This field is required" }}
             />
           </FormElement>
-          <ClorBoxContainer>
-            <ColorBox style={{ backgroundColor: "#b0d8f5" }} />
-            <ColorBox style={{ backgroundColor: "#cc5af2" }} />
-          </ClorBoxContainer>
+
+          <ColorBoxContainer>
+            {allColour?.map((x: any) => {
+              return <ColorBox style={{ backgroundColor: x.codeName }} onClick={() => checksubmit(x)} />
+            })}
+          </ColorBoxContainer>
+
         </MainContainer>
         <TodoNotes>
-          <Heading> No Todo Notes </Heading>
+          {todoList?.length > 0 ?
+            todoList?.map((todo: any) => {
+              return <ColorContentBox style={{ backgroundColor: todo.codeName }}> {todo.text}</ColorContentBox>
+            }) : <Heading> No Todo Notes </Heading>}
 
-          {/* <ColorContentBox style={{background: "#ff00ff"}}>  UI/UX </ColorContentBox> */}
         </TodoNotes>
       </DashBoardWrapper>
     </>

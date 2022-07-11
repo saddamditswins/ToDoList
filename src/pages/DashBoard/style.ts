@@ -31,11 +31,11 @@ export const FormElement = styled.div`
   }
 `;
 
-export const ClorBoxContainer = styled.div`
+export const ColorBoxContainer = styled.div`
   display: flex;
-  gap: 10px;
   width: 80%;
   margin: 0 auto;
+  gap: 10px;
 `;
 export const ColorContentBox = styled.div`
   padding: 25px 15px;
