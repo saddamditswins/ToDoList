@@ -1,13 +1,16 @@
+import { useState } from "react";
 import Header from "../Header";
 import SideBar from "../SideBar";
 import { Main } from "./style";
 
-function DashBoardLayout({ children }: { children: JSX.Element }) {
+function DashBoardLayout({ children, setColor }: { children: JSX.Element, setColor: any }) {
+
+  debugger
   return (
     <>
       <Header />
-      <SideBar />
-      <Main>{children}</Main>
+      <SideBar setColor={setColor} />
+      <Main >{children}</Main>
     </>
   );
 }

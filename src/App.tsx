@@ -14,6 +14,7 @@ function App() {
 
 
   const [isloading, setLoading] = useState(true);
+  const [color, setColor] = useState({});
   return (
     <>
       <ToastContainer />
@@ -25,9 +26,9 @@ function App() {
               <Route
                 path={route.path}
                 element={
-                  <DashBoardLayout>
+                  <DashBoardLayout setColor={setColor}>
                     <Suspense fallback="...Loading">
-                      <route.element setLoading={setLoading} />
+                      <route.element setLoading={setLoading} color={color} />
                     </Suspense>
                   </DashBoardLayout>
                 }

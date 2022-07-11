@@ -15,42 +15,73 @@ import API from "../../services/Api.Service";
 import useValidator from "../../hooks/useValidator";
 import { SuccessToast } from "../../components/Toaster";
 const DashBoard = (props: any) => {
+
+
   const [validator, showValidationMessage] = useValidator();
-  const [colorCombination, setEditUser] = useState({
+  const [todoItem, setTodoItem] = useState({
     name: "",
+    toDoListId: -1
+
   });
   const [allColour, setAllColour] = useState([]);
-
   const [todoList, setTodoList] = useState([]);
 
   const onChange = (name: any, value: any) => {
-    setEditUser({ ...colorCombination, [name]: value });
+    setTodoItem({ ...todoItem, [name]: value });
   };
+  useEffect(() => {
+    debugger
+    getGetToDoList(props.color.globalCodeId)
+  }, [props.color]);
+
   useEffect(() => {
     API.get(API_URLS.GlobalCode, {
       params: { CategoryName: "ColourType", GlobalCodeId: "-1" },
     }).then((response: any) => {
       setAllColour(response);
     });
-    getGetToDoList();
+    getGetToDoList(-1);
   }, []);
 
   function checksubmit(e: any) {
     if (validator.allValid()) {
-      API.post(API_URLS.AddToDoList, { toDoListId: null, colourId: e.globalCodeId, text: colorCombination.name, actionPerformedBy: null }).then((response: any) => {
+      API.post(API_URLS.AddToDoList, { toDoListId: todoItem.toDoListId, colourId: e.globalCodeId, text: todoItem.name, actionPerformedBy: null }).then((response: any) => {
         SuccessToast(response.responseMessage)
-        getGetToDoList();
+        setTodoItem({ ...todoItem, name: "" });
+        getGetToDoList(-1);
       });
     } else {
       showValidationMessage(true);
     }
   }
-  const getGetToDoList = () => {
-    API.get(API_URLS.GetToDoList, { params: { ToDoListId: -1, ColourId: -1, PageNo: 1, PageSize: 1000, SearchValue: "", SortColumn: "", SortOrder: "" } }).then((response: any) => {
+  const getGetToDoList = (colorId: any) => {
+    debugger
+    API.get(API_URLS.GetToDoList, { params: { ToDoListId: -1, ColourId: colorId, PageNo: 1, PageSize: 1000, SearchValue: "", SortColumn: "", SortOrder: "" } }).then((response: any) => {
       setTodoList(response);
     });
   }
-
+  const editToDoItem = (todo: any) => {
+    setTodoItem({
+      name: todo.text,
+      toDoListId: todo.toDoListId
+    });
+  }
+  const cancleToDoItem = () => {
+    setTodoItem({
+      name: "",
+      toDoListId: -1
+    });
+  }
+  const DeletedToDoList = () => {
+    API.delete(API_URLS.DeletedToDoList, { params: { ToDoListId: todoItem.toDoListId, ActionPerformedBy: null } }).then((response: any) => {
+      SuccessToast(response.responseMessage)
+      setTodoItem({
+        name: "",
+        toDoListId: -1
+      });
+      getGetToDoList(-1);
+    });
+  }
   return (
     <>
       <DashBoardWrapper>
@@ -60,13 +91,15 @@ const DashBoard = (props: any) => {
             <InputValidator
               type={"text"}
               name={"name"}
-              value={colorCombination.name}
+              value={todoItem.name}
               simpleValidator={validator}
               handleChange={onChange}
               customValidator="required"
               customMessage={{ required: "This field is required" }}
             />
           </FormElement>
+          <button onClick={() => DeletedToDoList()}>delete</button>
+          <button onClick={() => cancleToDoItem()}>cancle</button>
 
           <ColorBoxContainer>
             {allColour?.map((x: any) => {
@@ -78,7 +111,7 @@ const DashBoard = (props: any) => {
         <TodoNotes>
           {todoList?.length > 0 ?
             todoList?.map((todo: any) => {
-              return <ColorContentBox style={{ backgroundColor: todo.codeName }}> {todo.text}</ColorContentBox>
+              return <ColorContentBox onClick={() => editToDoItem(todo)} style={{ backgroundColor: todo.codeName }}> {todo.text}</ColorContentBox>
             }) : <Heading> No Todo Notes </Heading>}
 
         </TodoNotes>

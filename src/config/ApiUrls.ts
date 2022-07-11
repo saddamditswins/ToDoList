@@ -4,4 +4,5 @@ export const API_URLS = {
   GlobalCode: `${API_URL}/api/GlobalCode`,
   AddToDoList: `${API_URL}/api/ToDoList/AddToDoList`,
   GetToDoList: `${API_URL}/api/ToDoList/GetToDoList`,
+  DeletedToDoList: `${API_URL}/api/ToDoList/DeletedToDoList`,
 };
