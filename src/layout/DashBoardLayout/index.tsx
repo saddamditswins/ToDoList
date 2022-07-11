@@ -1,12 +1,4 @@
-import { Navigate } from "react-router-dom";
-import routePaths from "../../config/RoutePaths";
-
 function DashBoardLayout({ children }: { children: JSX.Element }) {
-
-  return (
-    <>
-      {children}
-    </>
-  );
+  return <div>{children}</div>;
 }
 export default DashBoardLayout;

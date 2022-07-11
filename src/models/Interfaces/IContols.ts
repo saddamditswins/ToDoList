@@ -17,4 +17,3 @@ export interface IInput {
   variant?: "outlined" | "filled";
   error?: any;
 }
-

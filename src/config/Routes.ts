@@ -13,4 +13,4 @@ export const routes: IRoute[] = [
     private: true,
     element: lazy(() => import("../pages/DashBoard")),
   },
- ];
+];

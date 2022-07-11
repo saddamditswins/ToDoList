@@ -1,3 +1,1 @@
-
-export const IconEnum = {
-};
+export const IconEnum = {};
