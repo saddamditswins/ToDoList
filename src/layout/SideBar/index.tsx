@@ -25,12 +25,12 @@ function SideBar({setColor}:ISidebar) {
   return (
     <SideBarWrapper>
       <Header>Filters</Header>
+      <Colors style={{background: "#fff"}}  onClick={()=>onFilterColor({})}>Show All</Colors>
       <ColorList>
         {allColour?.map((color: IGlobalCode) => {
           let isSelected = color.globalCodeId === selectedColor?.globalCodeId;
           return <Colors style={{ backgroundColor: color.codeName }}  className={`${isSelected?"active":""}`}  onClick={() => onFilterColor(color)}>{isSelected?"Selected":""}</Colors>
         })}
-        <Colors style={{background: "#fff"}}  onClick={()=>onFilterColor({})}>Show All</Colors>
       </ColorList>
     </SideBarWrapper>
   );

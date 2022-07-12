@@ -18,15 +18,19 @@ export const Header = styled.h3`
   padding: 18px 0;
   color: #fff;
   background-image: linear-gradient(to right, #088cd1, #7dc8f1);
+  margin: 0;
 `;
 export const ColorList = styled.ul`
-  padding: 20px 0;
+  padding: 0;
+  margin: 0;
+  list-style: none;
 `;
 export const Colors = styled.li`
-    padding: 20px 0;
-    background-color: #ff00ff;
-    text-align: center;
-    cursor: pointer;
+  height: 60px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
     &.active{
       border: 2px solid #0568b2;
       color: #fff;
