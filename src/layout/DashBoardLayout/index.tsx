@@ -5,7 +5,6 @@ import { Main } from "./style";
 
 function DashBoardLayout({ children, setColor }: { children: JSX.Element, setColor: any }) {
 
-  debugger
   return (
     <>
       <Header />

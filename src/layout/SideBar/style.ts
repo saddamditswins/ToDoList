@@ -23,7 +23,13 @@ export const ColorList = styled.ul`
   padding: 20px 0;
 `;
 export const Colors = styled.li`
-  padding: 20px 0;
-  background-color: #ff00ff;
-  margin-bottom: 10px;
+    padding: 20px 0;
+    background-color: #ff00ff;
+    text-align: center;
+    cursor: pointer;
+    &.active{
+      border: 2px solid #0568b2;
+      color: #fff;
+      font-weight: bolder;
+    }
   `;

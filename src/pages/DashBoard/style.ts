@@ -6,28 +6,48 @@ export const DashBoardWrapper = styled.div`
 `;
 
 export const MainContainer = styled.div`
-  width: 800px;
-  margin: 25px auto;
   box-shadow: 0px 2px 2px 3px #00000012;
-  height: auto;
-  padding: 25px 0 40px;
   background: #fff;
+  width: 800px;
+  margin: 10px auto;
+  padding: 20px 20px;
   border-radius: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 `;
 
 export const ColorBox = styled.div`
   height: 60px;
   width: 60px;
   border-radius: 5px;
+  cursor: pointer;
 `;
 
 export const FormElement = styled.div`
   display: flex;
   flex-direction: column;
-  width: 80%;
+  width: 90%;
   margin: 25px auto;
+  position: relative;
   label {
     margin-bottom: 10px;
+  }
+  .cancel{
+    position: absolute;
+    top: 20px;
+    right: -9px;
+    height: 22px;
+    width: 21px;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    color: #358dd1;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 1px solid #ccc;
   }
 `;
 
@@ -35,7 +55,7 @@ export const ColorBoxContainer = styled.div`
   display: flex;
   width: 80%;
   margin: 0 auto;
-  gap: 10px;
+  gap: 20px;
 `;
 export const ColorContentBox = styled.div`
   padding: 25px 15px;
@@ -44,6 +64,25 @@ export const ColorContentBox = styled.div`
   border-radius: 5px;
   color: #fff;
   font-weight: bold;
+  text-align: center;
+  min-width: 70px;
+  position: relative;
+  i{
+    position: absolute;
+    top: -9px;
+    right: -9px;
+    height: 25px;
+    width: 25px;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    color: #358dd1;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0px 2px 2px 3px #00000012;
+  }
 `;
 
 export const TodoNotes = styled.div`
@@ -55,9 +94,27 @@ export const TodoNotes = styled.div`
   border-radius: 5px;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 20px;
 `;
 export const Heading = styled.h3`
   text-align: center;
   width: 100%;
+`;
+export const DeleteBtn = styled.div`
+  display: flex;
+  align-items: center;
+  i{
+    height: 35px;
+    width: 45px;
+    margin-top: 12px;
+    font-size: 19px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    color: #e5513d;
+    box-shadow: 0px 2px 2px 3px #00000012;
+    border-radius: 5px;
+    cursor:pointer;
+  }
 `;
