@@ -9,35 +9,42 @@ import {
   Heading,
   DeleteBtn,
 } from "./style";
-import InputValidator from "../Form/input";
+import InputValidator from "../../components/Form/input";
 import { useState, useEffect } from "react";
 import { API_URLS } from "../../config/ApiUrls";
 import API from "../../services/Api.Service";
 import useValidator from "../../hooks/useValidator";
-import { SuccessToast } from "../../components/Toaster";
-import { Icon } from "semantic-ui-react";
+import { SuccessToast, ErrorToast } from "../../components/Toaster";
+import { Icon, Form } from "semantic-ui-react";
 import { IAddTodoItem, IGlobalCode, ITodoItem } from "../../models/Interfaces/IGlobalCode";
 import { IDashBordProps } from "../../models/Interfaces/IDashBord";
-const DashBoard = ({color}:IDashBordProps) => {
+import DeleteModal from "../../modals/deleteModal";
+const DashBoard = ({ color }: IDashBordProps) => {
+
+  const [openModal, setOpenModal] = useState(false);
   const [validator, showValidationMessage] = useValidator();
-  const [todoItem, setTodoItem] = useState<IAddTodoItem>({name: "",toDoListId: null,globalCodeId:-1});
+  const [todoItem, setTodoItem] = useState<IAddTodoItem>({ name: "", toDoListId: null, globalCodeId: -1 });
   const [allColour, setAllColour] = useState<IGlobalCode[] | null>(null);
   const [filteredColour, setFilteredColour] = useState<IGlobalCode[] | null>(null);
-
+  const [open, setOpen] = useState(false)
   const [todoList, setTodoList] = useState([]);
 
-  const onChange = (name: string, value: string) => {
+  const onChange = (name: string, value: any) => {
     setTodoItem({ ...todoItem, [name]: value });
+    if (name === "globalCodeId" && todoItem.name !== "" && value > -1) {
+      checksubmit(value);
+    }
+
   };
   useEffect(() => {
     getGetToDoList();
-    if(color?.globalCodeId){
-      const filtered:IGlobalCode[] =  allColour?.filter((filtred:IGlobalCode)=>{
+    if (color?.globalCodeId) {
+      const filtered: IGlobalCode[] = allColour?.filter((filtred: IGlobalCode) => {
         return filtred.globalCodeId === color.globalCodeId
       }) as IGlobalCode[];
       setFilteredColour(filtered);
     }
-    else{
+    else {
       setFilteredColour(allColour);
     }
   }, [color]);
@@ -51,16 +58,29 @@ const DashBoard = ({color}:IDashBordProps) => {
     });
   }, []);
 
-  function checksubmit(e: any) {
+  function onKeyPress(e: any) {
+    if (e.charCode !== 13) {
+      return;
+    }
+    checksubmit();
+  }
+
+  function checksubmit(selectedColor?: number) {
+    let colorId = selectedColor ?? todoItem.globalCodeId;
     if (validator.allValid()) {
-      API.post(API_URLS.AddToDoList, { toDoListId: todoItem.toDoListId, colourId: e.globalCodeId, text: todoItem.name, actionPerformedBy: null }).then((response: any) => {
-        SuccessToast(response.responseMessage)
-        setTodoItem({ ...todoItem, name: "", toDoListId: null,globalCodeId:-1});
-        showValidationMessage(false);
-        getGetToDoList();
-      });
+      if (colorId > -1) {
+        API.post(API_URLS.AddToDoList, { toDoListId: todoItem.toDoListId, colourId: colorId, text: todoItem.name, actionPerformedBy: null }).then((response: any) => {
+          SuccessToast(response.responseMessage)
+          setTodoItem({ ...todoItem, name: "", toDoListId: null, globalCodeId: -1 });
+          getGetToDoList();
+          showValidationMessage(false);
+        });
+      }
+      else {
+        ErrorToast("Please select color.");
+      }
     } else {
-      showValidationMessage(true);
+      ErrorToast("Please enter todo task.");
     }
   }
   const getGetToDoList = () => {
@@ -69,18 +89,26 @@ const DashBoard = ({color}:IDashBordProps) => {
     });
   }
   const editToDoItem = (todo: ITodoItem) => {
-    setTodoItem({ name: todo.text, toDoListId: todo.toDoListId,globalCodeId:todo.colourId});
+    setTodoItem({ name: todo.text, toDoListId: todo.toDoListId, globalCodeId: todo.colourId });
   }
   const cancelTodoItem = () => {
-    setTodoItem({name: "",toDoListId: null,globalCodeId:-1});
+    setTodoItem({ name: "", toDoListId: null, globalCodeId: -1 });
   }
-  const DeletedToDoList = () => {
-    API.delete(API_URLS.DeletedToDoList, { params: { ToDoListId: todoItem.toDoListId, ActionPerformedBy: null } }).then((response: any) => {
-      SuccessToast(response.responseMessage)
+  const DeletedToDoList = (isConfimed: boolean) => {
+    if (isConfimed) {
+      API.delete(API_URLS.DeletedToDoList, { params: { ToDoListId: todoItem.toDoListId, ActionPerformedBy: null } }).then((response: any) => {
+        SuccessToast(response.responseMessage)
+        cancelTodoItem();
+        getGetToDoList();
+      });
+    }
+    else {
       cancelTodoItem();
-      getGetToDoList();
-    });
+    }
+    setOpenModal(false);
   }
+
+
 
   return (
     <>
@@ -96,26 +124,27 @@ const DashBoard = ({color}:IDashBordProps) => {
               handleChange={onChange}
               customValidator="required"
               customMessage={{ required: "This field is required" }}
+              onKeyPress={onKeyPress}
             />
-          {todoItem?.toDoListId  && <Icon className="cancel" onClick={() => cancelTodoItem()} title="Cancel" name="cancel"/>}
+            {todoItem?.toDoListId && <Icon className="cancel" onClick={() => cancelTodoItem()} title="Cancel" name="cancel" />}
           </FormElement>
-          <DeleteBtn onClick={() => DeletedToDoList()}>
-          {todoItem?.toDoListId &&  <Icon className="trash" title="trash" name="trash"/>}
-           </DeleteBtn>
+          <DeleteBtn onClick={() => setOpenModal(true)}>
+            {todoItem?.toDoListId && <Icon className="trash" title="trash" name="trash" />}
+          </DeleteBtn>
           <ColorBoxContainer>
             {filteredColour?.map((color: IGlobalCode) => {
               let selected = color.globalCodeId === todoItem.globalCodeId
-              return <ColorBox style={{ backgroundColor: color.codeName }} className={`${selected?"selected":""}`} onClick={() => checksubmit(color)} />
+              return <ColorBox style={{ backgroundColor: color.codeName }} className={`${selected ? "selected" : ""}`} onClick={() => onChange("globalCodeId", color.globalCodeId)} />
             })}
           </ColorBoxContainer>
         </MainContainer>
         <TodoNotes>
           {todoList?.length > 0 ?
             todoList?.map((todo: ITodoItem) => {
-              return <ColorContentBox style={{ backgroundColor: todo.codeName }}> {todo.text} <Icon name="pencil alternate" onClick={() => editToDoItem(todo)}/></ColorContentBox>
+              return <ColorContentBox style={{ backgroundColor: todo.codeName }}> {todo.text} <Icon name="pencil alternate" onClick={() => editToDoItem(todo)} /></ColorContentBox>
             }) : <Heading> No Todo Notes </Heading>}
-
         </TodoNotes>
+        <DeleteModal isOpen={openModal} setCloseModal={DeletedToDoList} />
       </DashBoardWrapper>
     </>
   );
