@@ -12,8 +12,8 @@ export const HeaderWrapper = styled.header`
   align-items: center;
   padding: 0 20px;
   font-size: 20px;
-
-  i {
-    font-size: 20px;
-  }
+  position: fixed;
+  top: 0;
+  left: 250px;
+  z-index: 99;
 `;

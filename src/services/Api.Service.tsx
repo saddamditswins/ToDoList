@@ -19,8 +19,9 @@ API.interceptors.response.use(
     return Promise.resolve(next.data);
   },
   (error) => {
+    debugger;
     // You can handle error here and trigger warning message without get in the code inside
-    ErrorToast(JSON.parse(error.request.response).message);
+    ErrorToast(JSON.parse(error.request.response).responseMessage);
     return Promise.reject(JSON.parse(error.request.response));
   },
 );

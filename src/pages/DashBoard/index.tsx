@@ -56,6 +56,7 @@ const DashBoard = ({color}:IDashBordProps) => {
       API.post(API_URLS.AddToDoList, { toDoListId: todoItem.toDoListId, colourId: e.globalCodeId, text: todoItem.name, actionPerformedBy: null }).then((response: any) => {
         SuccessToast(response.responseMessage)
         setTodoItem({ ...todoItem, name: "", toDoListId: null,globalCodeId:-1});
+        showValidationMessage(false);
         getGetToDoList();
       });
     } else {
