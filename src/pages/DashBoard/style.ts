@@ -22,6 +22,9 @@ export const ColorBox = styled.div`
   width: 60px;
   border-radius: 5px;
   cursor: pointer;
+    &.selected{
+      box-shadow: -1px 0px 0px 5px #0000001f;
+    }
 `;
 
 export const FormElement = styled.div`

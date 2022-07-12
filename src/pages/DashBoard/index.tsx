@@ -55,7 +55,7 @@ const DashBoard = ({color}:IDashBordProps) => {
     if (validator.allValid()) {
       API.post(API_URLS.AddToDoList, { toDoListId: todoItem.toDoListId, colourId: e.globalCodeId, text: todoItem.name, actionPerformedBy: null }).then((response: any) => {
         SuccessToast(response.responseMessage)
-        setTodoItem({ ...todoItem, name: "", toDoListId: null});
+        setTodoItem({ ...todoItem, name: "", toDoListId: null,globalCodeId:-1});
         getGetToDoList();
       });
     } else {
@@ -104,7 +104,7 @@ const DashBoard = ({color}:IDashBordProps) => {
           <ColorBoxContainer>
             {filteredColour?.map((color: IGlobalCode) => {
               let selected = color.globalCodeId === todoItem.globalCodeId
-              return <ColorBox style={{ backgroundColor: color.codeName }} className={`${selected}?"selected":""`} onClick={() => checksubmit(color)} />
+              return <ColorBox style={{ backgroundColor: color.codeName }} className={`${selected?"selected":""}`} onClick={() => checksubmit(color)} />
             })}
           </ColorBoxContainer>
         </MainContainer>
